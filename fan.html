@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three.js Fan</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.min.js"></script>
+  <script>
+    // Set up the scene, camera, and renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Create the fan base (cylinder)
+    const baseGeometry = new THREE.CylinderGeometry(0.1, 0.1, 1, 32); // Radius top, Radius bottom, height
+    const baseMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 }); // Black color
+    const base = new THREE.Mesh(baseGeometry, baseMaterial);
+    base.position.y = -0.5;
+    scene.add(base);
+
+    // Create the fan blades
+    const bladeGeometry = new THREE.BoxGeometry(0.05, 1, 0.2); // Width, height, depth
+    const bladeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Green color
+
+    const blades = [];
+    for (let i = 0; i < 4; i++) {
+      const blade = new THREE.Mesh(bladeGeometry, bladeMaterial);
+      blade.rotation.z = (Math.PI / 2) * i; // Rotate each blade
+      blades.push(blade);
+      scene.add(blade);
+    }
+
+    // Set the camera position
+    camera.position.z = 5;
+
+    // Rotate the blades
+    function animate() {
+      requestAnimationFrame(animate);
+      blades.forEach(blade => (blade.rotation.z += 0.05)); // Rotate the blades
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
