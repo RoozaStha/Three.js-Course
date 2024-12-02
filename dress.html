@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three.js Dress</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.min.js"></script>
+  <script>
+    // Set up the scene, camera, and renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Helper function to create a part of the dress
+    function createPart(geometry, color, position) {
+      const material = new THREE.MeshBasicMaterial({ color });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(position.x, position.y, position.z);
+      return mesh;
+    }
+
+    // Create the top of the dress
+    const top = createPart(new THREE.CylinderGeometry(0.4, 0.4, 0.8, 32), 0xff69b4, { x: 0, y: 0.5, z: 0 });
+
+    // Create the skirt of the dress
+    const skirt = createPart(new THREE.ConeGeometry(0.8, 1.2, 32), 0xff69b4, { x: 0, y: -0.4, z: 0 });
+
+    // Add top and skirt to the scene
+    scene.add(top, skirt);
+
+    // Set the camera position
+    camera.position.z = 3;
+
+    // Render the scene
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
