@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three.js Laptop</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.min.js"></script>
+  <script>
+    // Set up the scene, camera, and renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Helper function to create a part of the laptop
+    function createPart(geometry, color, position) {
+      const material = new THREE.MeshBasicMaterial({ color });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(position.x, position.y, position.z);
+      return mesh;
+    }
+
+    // Create the base of the laptop
+    const baseGeometry = new THREE.BoxGeometry(1.5, 0.1, 1);
+    const base = createPart(baseGeometry, 0x222222, { x: 0, y: 0, z: 0 });
+
+    // Create the screen of the laptop
+    const screenGeometry = new THREE.BoxGeometry(1.5, 1, 0.1);
+    const screen = createPart(screenGeometry, 0x4444aa, { x: 0, y: 0.55, z: -0.45 });
+    screen.rotation.x = -Math.PI / 3; // Tilt the screen slightly
+
+    // Create the hinge
+    const hingeGeometry = new THREE.CylinderGeometry(0.05, 0.05, 1.5, 32);
+    const hinge = createPart(hingeGeometry, 0xaaaaaa, { x: 0, y: 0.05, z: -0.5 });
+    hinge.rotation.z = Math.PI / 2; // Rotate to align with the base
+
+    // Add parts to the scene
+    scene.add(base, screen, hinge);
+
+    // Set the camera position
+    camera.position.z = 3;
+
+    // Render the scene
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
