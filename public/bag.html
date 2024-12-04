@@ -1,0 +1,57 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three.js Bag</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.154.0/build/three.min.js"></script>
+  <script>
+    // Set up the scene, camera, and renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Helper function to create a part of the bag
+    function createPart(geometry, color, position) {
+      const material = new THREE.MeshBasicMaterial({ color });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(position.x, position.y, position.z);
+      return mesh;
+    }
+
+    // Create the main body of the bag
+    const bodyGeometry = new THREE.BoxGeometry(1, 1.5, 0.5);
+    const body = createPart(bodyGeometry, 0x8b0000, { x: 0, y: 0, z: 0 });
+
+    // Create the flap of the bag
+    const flapGeometry = new THREE.BoxGeometry(1, 0.4, 0.5);
+    const flap = createPart(flapGeometry, 0x8b0000, { x: 0, y: 0.85, z: 0 });
+
+    // Create the handle of the bag
+    const handleGeometry = new THREE.TorusGeometry(0.5, 0.05, 16, 100);
+    const handle = createPart(handleGeometry, 0x8b0000, { x: 0, y: 1.1, z: 0 });
+    handle.rotation.x = Math.PI / 2;
+
+    // Add all parts to the scene
+    scene.add(body, flap, handle);
+
+    // Set the camera position
+    camera.position.z = 3;
+
+    // Render the scene
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
