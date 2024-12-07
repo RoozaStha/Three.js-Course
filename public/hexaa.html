@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hexagon in Three.js</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <!-- Three.js Script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script>
+    // Scene setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Function to create a hexagon shape
+    function createHexagon(radius) {
+      const shape = new THREE.Shape();
+      const angleStep = (Math.PI * 2) / 6; // 360 degrees divided by 6 sides
+
+      for (let i = 0; i < 6; i++) {
+        const x = radius * Math.cos(i * angleStep);
+        const y = radius * Math.sin(i * angleStep);
+
+        if (i === 0) {
+          shape.moveTo(x, y);
+        } else {
+          shape.lineTo(x, y);
+        }
+      }
+      shape.closePath();
+      return shape;
+    }
+
+    // Create hexagon geometry and mesh
+    const hexagonShape = createHexagon(5); // Radius of the hexagon
+    const geometry = new THREE.ShapeGeometry(hexagonShape);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
+    const hexagonMesh = new THREE.Mesh(geometry, material);
+
+    // Add hexagon to the scene
+    scene.add(hexagonMesh);
+
+    // Position camera
+    camera.position.z = 10;
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      hexagonMesh.rotation.y += 0.01; // Optional rotation for effect
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
