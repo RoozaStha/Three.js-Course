@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stickman with Three.js</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script>
+    // Scene, Camera, Renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Material
+    const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+
+    // Head (Sphere)
+    const head = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 32), material);
+    head.position.y = 5;
+    scene.add(head);
+
+    // Body (Cylinder)
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.5, 4, 32), material);
+    body.position.y = 3;
+    scene.add(body);
+
+    // Arms (Cylinders)
+    const leftArm = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 3, 32), material);
+    leftArm.rotation.z = Math.PI / 4;
+    leftArm.position.set(-2, 4, 0);
+    scene.add(leftArm);
+
+    const rightArm = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 3, 32), material);
+    rightArm.rotation.z = -Math.PI / 4;
+    rightArm.position.set(2, 4, 0);
+    scene.add(rightArm);
+
+    // Legs (Cylinders)
+    const leftLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 4, 32), material);
+    leftLeg.rotation.z = Math.PI / 6;
+    leftLeg.position.set(-1, 1, 0);
+    scene.add(leftLeg);
+
+    const rightLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 4, 32), material);
+    rightLeg.rotation.z = -Math.PI / 6;
+    rightLeg.position.set(1, 1, 0);
+    scene.add(rightLeg);
+
+    // Set Camera Position
+    camera.position.z = 10;
+
+    // Render Loop
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+    animate();
+  </script>
+</body>
+</html>
