@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nonagon in Three.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/147/three.min.js"></script>
+</head>
+<body>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create a nonagon shape
+        const sides = 9; // Number of sides for the nonagon
+        const radius = 5; // Radius of the nonagon
+        const nonagonShape = new THREE.Shape();
+        
+        for (let i = 0; i < sides; i++) {
+            const angle = (i / sides) * Math.PI * 2; // Compute the angle for each vertex
+            const x = radius * Math.cos(angle);
+            const y = radius * Math.sin(angle);
+            if (i === 0) {
+                nonagonShape.moveTo(x, y);
+            } else {
+                nonagonShape.lineTo(x, y);
+            }
+        }
+        nonagonShape.closePath();
+
+        // Extrude the shape to give it some depth
+        const extrudeSettings = { depth: 1, bevelEnabled: false };
+        const geometry = new THREE.ExtrudeGeometry(nonagonShape, extrudeSettings);
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+        const nonagonMesh = new THREE.Mesh(geometry, material);
+
+        scene.add(nonagonMesh);
+
+        // Position the camera
+        camera.position.z = 10;
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            nonagonMesh.rotation.x += 0.01;
+            nonagonMesh.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
