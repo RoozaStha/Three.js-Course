@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decagon with Three.js</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r146/three.min.js"></script>
+</head>
+<body>
+    <script>
+        // Create the scene
+        const scene = new THREE.Scene();
+
+        // Create the camera
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        // Create the renderer
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Function to create a decagon geometry
+        function createDecagon() {
+            const radius = 1; // Radius of the decagon
+            const segments = 10; // Number of sides
+
+            // Create shape for decagon
+            const shape = new THREE.Shape();
+            for (let i = 0; i < segments; i++) {
+                const angle = (i / segments) * Math.PI * 2;
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+                if (i === 0) {
+                    shape.moveTo(x, y);
+                } else {
+                    shape.lineTo(x, y);
+                }
+            }
+            shape.closePath();
+
+            // Extrude the shape to give it depth
+            const extrudeSettings = {
+                depth: 0.2,
+                bevelEnabled: false
+            };
+
+            return new THREE.ExtrudeGeometry(shape, extrudeSettings);
+        }
+
+        // Create the decagon mesh
+        const geometry = createDecagon();
+        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: false });
+        const decagon = new THREE.Mesh(geometry, material);
+
+        scene.add(decagon);
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            decagon.rotation.x += 0.01;
+            decagon.rotation.y += 0.01;
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        });
+    </script>
+</body>
+</html>
